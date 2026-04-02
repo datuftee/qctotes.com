@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quad City Totes — Moving Totes for Realtors</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0f0f0f;
+    --black-soft: #1a1a1a;
+    --black-card: #222222;
+    --yellow: #f5c800;
+    --yellow-light: #ffd740;
+    --yellow-dim: #c9a200;
+    --white: #ffffff;
+    --gray: #aaaaaa;
+    --gray-dim: #555555;
+    --border: rgba(255,255,255,0.08);
+    --border-yellow: rgba(245,200,0,0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 4rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+  .logo span { color: var(--yellow); }
+  nav a {
+    text-decoration: none;
+    color: var(--gray);
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-left: 2rem;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--yellow); }
+  .nav-cta {
+    background: var(--yellow) !important;
+    color: var(--black) !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 3px;
+    font-weight: 500 !important;
+  }
+  .nav-cta:hover { background: var(--yellow-light) !important; }
+
+  /* HERO */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 88vh;
+    align-items: center;
+  }
+  .hero-left {
+    padding: 6rem 4rem;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(245,200,0,0.12);
+    color: var(--yellow);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 2px;
+    margin-bottom: 1.75rem;
+    border: 1px solid var(--border-yellow);
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5rem);
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+  .hero h1 span { color: var(--yellow); }
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--gray);
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--yellow);
+    color: var(--black);
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 3px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--yellow-light); }
+  .btn-secondary {
+    color: var(--gray);
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--yellow); }
+
+  .hero-right {
+    background: var(--black-soft);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 3rem;
+    position: relative;
+    overflow: hidden;
+    border-left: 1px solid var(--border);
+  }
+
+  .tote-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .tote {
+    background: var(--black-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+    animation: slideIn 0.5s ease both;
+    width: 320px;
+  }
+  .tote:nth-child(1) { animation-delay: 0.1s; margin-left: 24px; border-left: 3px solid var(--yellow); }
+  .tote:nth-child(2) { animation-delay: 0.2s; border-left: 3px solid var(--yellow); }
+  .tote:nth-child(3) { animation-delay: 0.3s; margin-left: 16px; border-left: 3px solid var(--yellow); }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .tote-icon {
+    width: 42px;
+    height: 34px;
+    background: var(--yellow);
+    border-radius: 3px 3px 5px 5px;
+    border-top: 5px solid var(--yellow-light);
+    flex-shrink: 0;
+  }
+  .tote-info { flex: 1; }
+  .tote-info p { font-size: 0.85rem; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+  .tote-info span { font-size: 0.75rem; color: var(--gray); }
+  .tote-check {
+    width: 22px; height: 22px;
+    background: rgba(245,200,0,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tote-check svg { width: 12px; height: 12px; }
+
+  .hero-corner {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 200px; height: 200px;
+    border-top: 1px solid var(--border-yellow);
+    border-left: 1px solid var(--border-yellow);
+    border-radius: 0;
+    opacity: 0.4;
+  }
+
+  /* STATS */
+  .stats {
+    background: var(--yellow);
+    padding: 2.5rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-item .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--black);
+    display: block;
+    margin-bottom: 0.15rem;
+    letter-spacing: 0.03em;
+  }
+  .stat-item p { font-size: 0.82rem; color: rgba(0,0,0,0.6); font-weight: 400; }
+
+  /* SECTIONS */
+  .section { padding: 5rem 4rem; }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 0.75rem;
+  }
+  .section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 3rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* STEPS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .step { position: relative; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: rgba(245,200,0,0.15);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+  .step h3 { font-size: 0.95rem; font-weight: 500; color: var(--white); margin-bottom: 0.5rem; }
+  .step p { font-size: 0.85rem; color: var(--gray); line-height: 1.7; }
+  .step-line {
+    position: absolute;
+    top: 1.8rem;
+    right: 0;
+    width: 55%;
+    height: 1px;
+    background: var(--border);
+  }
+  .step:last-child .step-line { display: none; }
+
+  /* PRICING */
+  .pricing-section { background: var(--black-soft); padding: 5rem 4rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .price-card {
+    background: var(--black-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2rem;
+    transition: border-color 0.2s;
+  }
+  .price-card.featured {
+    border: 2px solid var(--yellow);
+  }
+  .featured-badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+  .price-name { font-size: 0.8rem; font-weight: 500; color: var(--gray); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
+  }
+  .price-per { font-size: 0.78rem; color: var(--gray-dim); margin-bottom: 1.5rem; }
+  .price-features { list-style: none; margin-bottom: 2rem; }
+  .price-features li {
+    font-size: 0.85rem;
+    color: var(--gray);
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .price-features li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--yellow);
+    flex-shrink: 0;
+  }
+  .price-cta {
+    display: block;
+    text-align: center;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-dim);
+    border-radius: 3px;
+    color: var(--gray);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .price-cta:hover { border-color: var(--yellow); color: var(--yellow); }
+  .price-card.featured .price-cta {
+    background: var(--yellow);
+    color: var(--black);
+    border-color: var(--yellow);
+  }
+  .price-card.featured .price-cta:hover { background: var(--yellow-light); }
+
+  /* WHY */
+  .why-section { padding: 5rem 4rem; }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .why-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 3vw, 3rem);
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+  .why-left p { font-size: 0.95rem; color: var(--gray); line-height: 1.8; margin-bottom: 1rem; }
+  .why-right { display: flex; flex-direction: column; gap: 1rem; }
+  .why-card {
+    background: var(--black-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .why-card:hover { border-color: var(--border-yellow); }
+  .why-icon {
+    width: 36px; height: 36px;
+    background: rgba(245,200,0,0.12);
+    border: 1px solid var(--border-yellow);
+    border-radius: 5px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .why-icon svg { width: 16px; height: 16px; }
+  .why-card h4 { font-size: 0.9rem; font-weight: 500; color: var(--white); margin-bottom: 0.25rem; }
+  .why-card p { font-size: 0.82rem; color: var(--gray); line-height: 1.65; }
+
+  /* CTA */
+  .cta-band {
+    background: var(--yellow);
+    padding: 5rem 4rem;
+    text-align: center;
+  }
+  .cta-band h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    color: var(--black);
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+  .cta-band p { color: rgba(0,0,0,0.6); font-size: 1rem; margin-bottom: 2.5rem; }
+  .cta-form { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .cta-form input {
+    padding: 0.85rem 1.25rem;
+    border: 1.5px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    background: rgba(0,0,0,0.06);
+    color: var(--black);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    width: 220px;
+    outline: none;
+  }
+  .cta-form input::placeholder { color: rgba(0,0,0,0.4); }
+  .cta-form input:focus { border-color: var(--black); }
+  .btn-black {
+    background: var(--black);
+    color: var(--yellow);
+    padding: 0.85rem 1.75rem;
+    border: none;
+    border-radius: 3px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-black:hover { background: #2a2a2a; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--black);
+  }
+  footer p { font-size: 0.8rem; color: var(--gray-dim); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 4rem 1.5rem; }
+    .stats { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; }
+
+    .steps { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">QUAD CITY <span>TOTES</span></div>
+  <div>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Quad Cities — Iowa &amp; Illinois</div>
+    <h1>The closing gift<br>they'll <span>actually</span> use</h1>
+    <p class="hero-sub">We rent sturdy moving totes to realtors as a closing gift for their clients. Delivered before the move, picked up after. Simple, memorable, and something no one else in the QC is doing.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Get started today</a>
+      <a href="#how" class="btn-secondary">See how it works →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-corner"></div>
+    <div class="tote-stack">
+      <div class="tote">
+        <div class="tote-icon"></div>
+        <div class="tote-info">
+          <p>Standard — 20 totes</p>
+          <span>Delivered on delivery date</span>
+        </div>
+        <div class="tote-check">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#f5c800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tote">
+        <div class="tote-icon"></div>
+        <div class="tote-info">
+          <p>2-week rental period</p>
+          <span>Plenty of time to settle in</span>
+        </div>
+        <div class="tote-check">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#f5c800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tote">
+        <div class="tote-icon"></div>
+        <div class="tote-info">
+          <p>Free pickup included</p>
+          <span>We handle everything</span>
+        </div>
+        <div class="tote-check">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#f5c800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat-item">
+    <span class="num">4,900+</span>
+    <p>QC homes sold in 2025</p>
+  </div>
+  <div class="stat-item">
+    <span class="num">900+</span>
+    <p>local realtors in the market</p>
+  </div>
+  <div class="stat-item">
+    <span class="num">$55</span>
+    <p>starting price per rental</p>
+  </div>
+</div>
+
+<section class="section" id="how">
+  <div class="section-label">How it works</div>
+  <h2>Four steps, zero hassle</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Realtor signs up</h3>
+      <p>Choose a tier and tell us the delivery date. That's all we need to get started.</p>
+      <div class="step-line"></div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>We deliver the totes</h3>
+      <p>Clean, sturdy totes arrive on your scheduled delivery date — ready to hand off to your client.</p>
+      <div class="step-line"></div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Client moves in</h3>
+      <p>Your client uses the totes for their move. They have 2 or 4 weeks depending on the option selected.</p>
+      <div class="step-line"></div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>We pick them up</h3>
+      <p>We schedule a free pickup when the client is ready. Nothing left for you to manage.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section" id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2>Simple, flat-rate rentals</h2>
+
+  <div style="display:flex;align-items:center;gap:0;margin-bottom:2.5rem;background:var(--black-card);border:1px solid var(--border);border-radius:4px;width:fit-content;">
+    <button onclick="setPricing('2week')" id="btn-2wk" style="padding:0.6rem 1.5rem;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.2s;background:var(--yellow);color:var(--black);">2-week rental</button>
+    <button onclick="setPricing('4week')" id="btn-4wk" style="padding:0.6rem 1.5rem;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--gray);">4-week rental &nbsp;<span style="font-size:0.75rem;opacity:0.8;">better value</span></button>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">Starter</div>
+      <div class="price-amount" id="pa1">$35</div>
+      <div class="price-per" id="pp1">2-week rental</div>
+      <ul class="price-features">
+        <li>10 totes</li>
+        <li id="dur1">14-day rental period</li>
+        <li>Delivery on your delivery date</li>
+        <li>Free pickup included</li>
+        <li>Best for condos &amp; small moves</li>
+      </ul>
+      <a href="#contact" class="price-cta">Get started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="featured-badge">Most popular</div>
+      <div class="price-name">Standard</div>
+      <div class="price-amount" id="pa2">$55</div>
+      <div class="price-per" id="pp2">2-week rental</div>
+      <ul class="price-features">
+        <li>20 totes</li>
+        <li id="dur2">14-day rental period</li>
+        <li>Delivery on your delivery date</li>
+        <li>Free pickup included</li>
+        <li>Best for typical home moves</li>
+      </ul>
+      <a href="#contact" class="price-cta">Get started</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name">Premium</div>
+      <div class="price-amount" id="pa3">$80</div>
+      <div class="price-per" id="pp3">2-week rental</div>
+      <ul class="price-features">
+        <li>30 totes</li>
+        <li id="dur3">14-day rental period</li>
+        <li>Delivery on your delivery date</li>
+        <li>Free pickup included</li>
+        <li>Best for large &amp; luxury moves</li>
+      </ul>
+      <a href="#contact" class="price-cta">Get started</a>
+    </div>
+  </div>
+
+  <div id="discount-bar" style="display:none;background:rgba(245,200,0,0.08);border:1px solid rgba(245,200,0,0.25);border-radius:4px;padding:0.85rem 1.25rem;margin-top:1.25rem;align-items:center;justify-content:space-between;">
+    <span style="font-size:13px;color:var(--gray);">4-week pricing is <strong style="color:var(--yellow);">1.5x the 2-week rate</strong> — twice the time for half the extra cost</span>
+    <span style="font-size:12px;color:var(--gray-dim);">More time, better value</span>
+  </div>
+</section>
+
+<script>
+function setPricing(mode) {
+  var is4 = mode === '4week';
+  var prices = is4 ? ['$53','$83','$120'] : ['$35','$55','$80'];
+  var per = is4 ? '4-week rental' : '2-week rental';
+  var dur = is4 ? '28-day rental period' : '14-day rental period';
+  for (var i = 1; i <= 3; i++) {
+    document.getElementById('pa'+i).textContent = prices[i-1];
+    document.getElementById('pp'+i).textContent = per;
+    document.getElementById('dur'+i).textContent = dur;
+  }
+  document.getElementById('discount-bar').style.display = is4 ? 'flex' : 'none';
+  document.getElementById('btn-2wk').style.background = is4 ? 'transparent' : 'var(--yellow)';
+  document.getElementById('btn-2wk').style.color = is4 ? 'var(--gray)' : 'var(--black)';
+  document.getElementById('btn-4wk').style.background = is4 ? 'var(--yellow)' : 'transparent';
+  document.getElementById('btn-4wk').style.color = is4 ? 'var(--black)' : 'var(--gray)';
+}
+</script>
+
+<section class="why-section">
+  <div class="why-grid">
+    <div class="why-left">
+      <div class="section-label">Why realtors love it</div>
+      <h2>Stand out long after the closing table</h2>
+      <p>Every realtor gives a closing gift. Most end up in a drawer. Moving totes get used every single day of the move — your clients think of you every time they pack a box.</p>
+      <p>It's practical, it's local, and nobody else in the QC is doing it yet.</p>
+    </div>
+    <div class="why-right">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 2L10 6h4L11 9l1.5 4.5L8 11l-4.5 2.5L5 9 2 6h4z" stroke="#f5c800" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h4>Memorable &amp; useful</h4>
+          <p>Clients remember the agent who made moving day easier — not the one who gave them a candle.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="6" stroke="#f5c800" stroke-width="1.2"/>
+            <path d="M8 5v3l2 2" stroke="#f5c800" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h4>Zero effort on your end</h4>
+          <p>We handle delivery, pickup, and cleaning. Just tell us the delivery date and we take it from there.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="5" width="12" height="8" rx="1.5" stroke="#f5c800" stroke-width="1.2"/>
+            <path d="M5 5V4a3 3 0 016 0v1" stroke="#f5c800" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h4>Add your branding</h4>
+          <p>Put your name and logo on the totes. Every box they pack is a reminder of who helped them get there.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <h2>Ready to get started?</h2>
+  <p>Drop your info and we'll reach out to set up your first rental.</p>
+  <form action="https://formspree.io/f/mreoadrl" method="POST" class="cta-form">
+    <input type="text" name="name" placeholder="Your name" required>
+    <input type="text" name="brokerage" placeholder="Brokerage" required>
+    <input type="email" name="email" placeholder="Email address" required>
+    <button type="submit" class="btn-black">Let's talk</button>
+  </form>
+</section>
+
+<footer>
+  <div class="logo">QUAD CITY <span style="color:var(--yellow)">TOTES</span></div>
+  <p>Serving Davenport, Bettendorf, Moline, Rock Island &amp; surrounding areas</p>
+  <p>© 2026 Quad City Totes</p>
+</footer>
+
+<script>
+  for (var i = 1; i <= 3; i++) {
+    document.getElementById('sp'+i).textContent = prices[i-1];
+    document.getElementById('sc'+i).textContent = cycles[i-1];
+  }
+}
+</script>
+</body>
+</html>
